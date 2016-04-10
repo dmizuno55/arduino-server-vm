@@ -7,23 +7,10 @@
     # yum repository setting
     - block:
       - name: add yum additional repos
-        yum: name={{item}}
-        with_items:
-          - http://ftp-srv2.kddilabs.jp/Linux/distributions/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
-          - http://www.city-fan.org/ftp/contrib/yum-repo/city-fan.org-release-1-13.rhel6.noarch.rpm
+        yum: name=epel-release
 
       - name: switch enable additional yum repos 
-        replace: dest=/etc/yum.repos.d/{{item}} regexp="enabled *= *1" replace="enable=0"
-        with_items:
-          - epel.repo
-          - city-fan.org.repo
-
-    # install common library
-    - name: update libcurl
-      yum: name=libcurl state=latest disablerepo=epel enablerepo=city-fan.org
-
-    - name: install unzip
-      yum: name=unzip state=installed
+        replace: dest=/etc/yum.repos.d/epel.repo regexp="enabled *= *1" replace="enable=0"
 
     # install nodejs
     - block:
@@ -36,23 +23,3 @@
       - name: add nodejs user
         user: name=nodejs comment="for nodejs executor" group=dialout
 
-    # install usb driver
-    - block:
-      - name: install usb driver (download)
-        get_url: url=http://www.wch.cn/downfile/202 dest=/tmp
-
-      - name: install usb driver (unzip)
-        shell: sudo unzip -o CH341PAR_LINUX.ZIP
-        args:
-          chdir: /tmp
-        
-      - name: install usb driver (make)
-        shell: sudo make
-        args:
-          chdir: /tmp/CH341PAR_LINUX/driver
-
-      - name: install usb driver (load)
-        shell: sudo make load
-        args:
-          chdir: /tmp/CH341PAR_LINUX/driver
-        ignore_errors: yes
