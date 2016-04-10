@@ -8,6 +8,11 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--usb", "on"]
+    vb.customize ["usbfilter", "add", "0",
+                  "--target", :id,
+                  "--name", "Arduino Nano",
+                  "--vendorid", "0x1A86",
+                  "--productid", "0x7523"]
   end
 
   config.vm.provision "ansible" do |ansible|
