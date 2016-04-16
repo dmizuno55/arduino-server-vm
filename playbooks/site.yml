@@ -4,21 +4,17 @@
   become_user: root
 
   tasks:
-    # yum repository setting
-    - block:
-      - name: add yum additional repos
-        yum: name=epel-release
-
-      - name: switch enable additional yum repos 
-        replace: dest=/etc/yum.repos.d/epel.repo regexp="enabled *= *1" replace="enable=0"
+    # install curl
+    - name: install curl
+      apt: name=curl state=present update_cache=yes
 
     # install nodejs
     - block:
       - name: prepare nodejs v4.x
-        shell: curl --silent --location https://rpm.nodesource.com/setup_4.x | sudo bash -
+        shell: curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 
       - name: install nodejs
-        yum: name=nodejs state=present
+        apt: name=nodejs state=present
 
       - name: add nodejs user
         user: name=nodejs comment="for nodejs executor" group=dialout

@@ -11,7 +11,7 @@ Node version is v4.x
 
 ### Install Base Box
 ```
-vagrant box add hfm4/centos7 https://atlas.hashicorp.com/hfm4/boxes/centos7
+vagrant box add ARTACK/debian-jessie https://atlas.hashicorp.com/ARTACK/boxes/debian-jessie
 ```
 
 ### Start up VM
